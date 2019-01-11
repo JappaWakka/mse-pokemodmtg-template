@@ -1,0 +1,65 @@
+﻿mse version: 2.0.0
+version: 1.0
+short name: pokemodtypesymbol
+installer group: pokemod/type symbolfont
+
+image font size: 150
+horizontal space: 1
+
+symbol:
+	code: {C}
+	image: type_colorless.png
+symbol:
+	code: {D}
+	image: type_darkness.png
+symbol:
+	code: {N}
+	image: type_dragon.png
+symbol:
+	code: {Y}
+	image: type_fairy.png
+symbol:
+	code: {F}
+	image: type_fighting.png
+symbol:
+	code: {R}
+	image: type_fire.png
+symbol:
+	code: {G}
+	image: type_grass.png
+symbol:
+	code: {L}
+	image: type_lightning.png
+symbol:
+	code: {M}
+	image: type_metal.png
+symbol:
+	code: {P}
+	image: type_psychic.png
+symbol:
+	code: {W}
+	image: type_water.png
+
+insert symbol menu:
+	item: {C}
+		type: code
+	item: {D}
+		type: code
+	item: {N}
+		type: code
+	item: {Y}
+		type: code
+	item: {F}
+		type: code
+	item: {R}
+		type: code
+	item: {G}
+		type: code
+	item: {L}
+		type: code
+	item: {M}
+		type: code
+	item: {P}
+		type: code
+	item: {W}
+		type: code
