@@ -139,7 +139,7 @@ card style:
 		top: 711
 		width: 494
 		height: 44
-		z index: 3
+		z index: 2
 		alignment: top center shrink-overflow
 		font: 
 			name: Gill Sans Italic
@@ -152,7 +152,7 @@ card style:
 		top: 765
 		width: { if card.card_frame = "Trainer" then 380 else 280 }
 		height: 18
-		z index: 2
+		z index: 3
 		alignment: bottom left
 		font: 
 			name: Gill Sans
@@ -164,7 +164,7 @@ card style:
 		top: 786
 		width: 80
 		height: 13
-		z index: 2
+		z index: 3
 		alignment: middle left
 		font: 
 			name: Gill Sans Italic
@@ -176,7 +176,7 @@ card style:
 		top: 770
 		width: 30
 		height: 30
-		z index: 2
+		z index: 3
 		alignment: middle center
 		font: 
 			name: Pokemon TCG Symbols _2018 U
@@ -188,7 +188,7 @@ card style:
 		top: 770
 		width: 23
 		height: 30
-		z index: 2
+		z index: 3
 		alignment: middle left
 		font: 
 			name: Pokemon TCG Symbols _2018 U
@@ -201,7 +201,7 @@ card style:
 		top: 479
 		width: 27
 		height: 27
-		z index: 2
+		z index: 3
 		popup style: in place
 		render style: image
 		choice images:
@@ -216,7 +216,7 @@ card style:
 		top: 426
 		width: 141
 		height: 39
-		z index: 2
+		z index: 3
 		popup style: in place
 		render style: image list
 		choice images:
@@ -228,7 +228,7 @@ card style:
 		top: 769
 		width: 30
 		height: 30
-		z index: 2
+		z index: 3
 		popup style: dropdown
 		render style: image
 		choice images:
@@ -243,7 +243,7 @@ card style:
 		top: 770
 		width: 25
 		height: 30
-		z index: 2
+		z index: 3
 		popup style: in place
 		render style: image list
 		choice images:
@@ -254,7 +254,7 @@ card style:
 		top: 77
 		width: 504
 		height: 386
-		z index: 0
+		z index: 1
 		mask: art_mask.png
 	attack1_cost:
 		left: 51
@@ -325,8 +325,9 @@ card style:
 	power_rules:
 		left: 51
 		top: 525
-		width: 496
-		height: 84
+		width: { if card.attack1_rules = "-power-" then "496" else "0"}
+		height: { if card.attack1_rules = "-power-" then "84" else "0"}
+		z index: 2
 		alignment: middle left shrink-overflow
 		allow formating: true
 		line height soft: 0.85
@@ -372,7 +373,7 @@ card style:
 		top: 525
 		width: { if card.card_frame != "Trainer" then 0 else 495 }
 		height: { if card.card_frame != "Trainer" then 0 else if card.card_subtype = "Supporter" then "168" else "212" }
-		z index: 3
+		z index: 2
 		alignment: {if card_style.trainer_rules.content_lines = 1 then "top center shrink-overflow" else "top left shrink-overflow" }
 		font: 
 			name: Gill Sans
