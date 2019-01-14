@@ -269,7 +269,7 @@ card style:
 			size: 26
 			color: rgb(0, 0, 0)
 			scale down to: 20
-		visible: { if card.attack1_rules ="-none-" or card.attack1_rules = "-power-" or card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
+		visible: { if card.attack1_rules ="-none-" or card.attack1_rules = "-power-" or card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
 	attack2_cost:
 		left: 51
 		top: { if card.attack1_rules = "-none-" then 525 else 615 }
@@ -283,13 +283,13 @@ card style:
 			size: 26
 			color: rgb(0, 0, 0)
 			scale down to: 20
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
+		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
 	attack1_rules:
 		left: 130
 		top: 525
 		width: { if card.attack1_damage ="-none-" then 408 else if card.attack1_rules = "-power-" then 0 else 340 }
 		height: { if card.attack1_rules ="-none-" or card.attack1_rules = "-power-" then "0" else "84" }
-		alignment: {if card_style.attack1_rules.content_lines = 1 then "middle center shrink-overflow" else "middle left shrink-overflow" }
+		alignment: {if card_style.attack1_rules.content_width < 250 and card_style.attack1_rules.content_lines = 1 then "middle center shrink-overflow" else "middle left shrink-overflow" }
 		allow formating: true
 		line height soft: 0.85
 		font: 
@@ -302,13 +302,13 @@ card style:
 			size: 20
 			alignment: top center
 			scale down to: 11
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
+		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
 	attack2_rules:
 		left: 130
 		top: { if card.attack1_rules = "-none-" then 525 else 615 }
 		width: { if card.attack2_damage ="-none-" then 408 else 340 }
 		height: { if card.attack1_rules ="-none-" then "168" else "84" }
-		alignment: {if card_style.attack2_rules.content_lines = 1 then "middle center shrink-overflow" else "middle left shrink-overflow" }
+		alignment: {if card_style.attack2_rules.content_width < 250 and card_style.attack2_rules.content_lines = 1  then "middle center shrink-overflow" else "middle left shrink-overflow" }
 		allow formating: true
 		line height soft: 0.85
 		font: 
@@ -321,14 +321,14 @@ card style:
 			size: 20
 			alignment: top center
 			scale down to: 11
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
+		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
 	power_rules:
 		left: 51
 		top: 525
-		width: { if card.attack1_rules = "-power-" then "496" else "0"}
-		height: { if card.attack1_rules = "-power-" then "84" else "0"}
+		width: { if card.attack1_rules = "-power-" or card.attack1_rules = "-fullpower-" then "496" else "0"}
+		height: { if card.attack1_rules = "-power-" then "84" else if card.attack1_rules = "-fullpower-" then "168" else "0" }
 		z index: 2
-		alignment: middle left shrink-overflow
+		alignment: { if card.attack1_rules = "-fullpower-" then "top left shrink-overflow" else "middle left shrink-overflow" }
 		allow formating: true
 		line height soft: 0.85
 		symbol font:
@@ -341,7 +341,7 @@ card style:
 			size: 20
 			color: rgb(0, 0, 0)
 			scale down to: 12
-		visible: { if card.attack1_rules = "-power-" then true else false }
+		visible: { if card.attack1_rules = "-power-" or card.attack1_rules = "-fullpower-" then true else false }
 	attack1_damage:
 		left: 472
 		top: 525
@@ -354,7 +354,7 @@ card style:
 			size: 28
 			color: rgb(0, 0, 0)
 			weight: bold
-		visible: { if card.attack1_rules ="-none-" or card.attack1_rules ="-power-" or card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
+		visible: { if card.attack1_rules ="-none-" or card.attack1_rules ="-power-" or card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
 	attack2_damage:
 		left: 472
 		top: { if card.attack1_rules = "-none-" then 525 else 615 }
@@ -367,7 +367,7 @@ card style:
 			size: 28
 			color: rgb(0, 0, 0)
 			weight: bold
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
+		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
 	trainer_rules:
 		left: 51
 		top: 525
