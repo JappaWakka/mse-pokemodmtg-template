@@ -1,4 +1,4 @@
-﻿### Welcome to the unofficial Pokemon TCG Template for Magic Set Editor created by Nikki. ###
+### Welcome to the unofficial Pokemon TCG Template for Magic Set Editor created by Nikki. ###
 
 mse version: 2.0.0
 short name: Pokemod
@@ -48,23 +48,23 @@ card field:
 	initial: Pokemon Grass
 	choice:
 		name: Pokemon
-		choice: Grass
-		choice: Fire
-		choice: Water
-		choice: Lightning
-		choice: Psychic
-		choice: Fighting
-		choice: Darkness
-		choice: Metal
-		choice: Fairy
-		choice: Dragon
 		choice: Colorless
+		choice: Darkness
+		choice: Dragon
+		choice: Fairy
+		choice: Fighting
+		choice: Fire
+		choice: Grass
+		choice: Lightning
+		choice: Metal
+		choice: Psychic
+		choice: Water
 
 	choice:
 		name: Energy
-		choice: Double Colorless
 		choice: Colorless
 		choice: Darkness
+		choice: Double Colorless
 		choice: Double Dragon
 		choice: Fairy
 		choice: Fighting
@@ -230,7 +230,7 @@ card field:
 	choice: Common
 	choice: Uncommon
 	choice: Rare
-	choice: Holo Rare
+	choice: Rare Holo
 
 
 ###### Dex Entry ######
@@ -294,6 +294,7 @@ card field:
 	name: card_subtype
 	description: Subtype of Card
 	show statistics: false
+	multi line: true
 	default: "Basic"
 
 ###### Pokémod Logo ######
