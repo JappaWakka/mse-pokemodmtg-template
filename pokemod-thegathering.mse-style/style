@@ -4,118 +4,699 @@ short name: PokémodMTG
 full name: Pokémod the Gathering
 installer group: pokemod/template style
 version: 1.0
-icon: pokemonmtg_icon.png
+icon: pokemonmtg-icon.png
 
 depends on: pokemod.mse-game 1.0.0
-depends on: pokemod-thegathering-symbols.mse-symbol-font
+depends on: pokemod-thegathering-coloredsymbols.mse-symbol-font
 
 card background: rgb(0,0,0)
 card width: 600
 card height: 825
 card dpi: 200
+
+init script:
+	#### Variables ####
+	attack_rule_width_withdamage := { 366 }
+	attack_rule_width_nodamage := { 434 }
+	attack_damage_width := { 73 }
+	attack_cost_left := { 40 }
+	attack_cost_width := { 73 }
 	
+	text_area_top := { 470 }
+	text_area_height := { 210 }
+	text_area_fields_x_offset := { 8 }
+	text_area_fields_y_offset := { 4 }
+		
+
+	### 2 Attacks/Powers ###
+	input_2_attack_line_max_1 := { 18 }
+	input_2_attack_line_max_2 := { 60 }
+	input_2_attack_line_max_3 := { 91 }
+	input_2_attack_line_max_4 := { 120 }
+	
+	input_2_power_line_max_2 := { 118 }
+	
+	### 3 Attacks/Powers ###
+	
+	input_3_attack_line_max_1 := { 37 }
+	input_3_attack_line_max_2 := { 93 }
+	input_3_attack_line_max_3 := { 191 }
+	input_3_power_line_max_1 := { 64 }
+	
+	is_pkmn_power := {if set.language == "English" then if contains(value, match: "mon Power:") or contains(value, match: "-Power:") then "true" else "false" else if set.language == "Nederlands" then if contains(value, match: "-Kracht:") then "true" else "false" else "false"}
+	is_pkmn_body := {if set.language == "English" then if contains(value, match: "mon Body:") or contains(value, match: "-Body:") then "true" else "false" else if set.language == "Nederlands" then if contains(value, match: "-Eigenschap:") then "true" else "false" else "false"}
+	is_baby_pkmn := {if set.language == "English" then if contains(value, match: "Baby Pok") then "true" else "false" else if set.language == "Nederlands" then if contains(value, match: "Baby-Pok") then "true" else "false" else "false"}
+	ability_color_filter := { value } +
+		remove_tag@(tag: "<color") +
+		replace@(match: "<b>", replace: { if is_pkmn_power(value) or is_baby_pkmn(value) then "<b><color:rgb(163,9,11)>" else if is_pkmn_body(value) then "<b><color:rgb(17,83,17)>" else "<b>" } ) +
+		replace@(match: "</b>", replace: { if not(is_pkmn_power(value)) and not(is_pkmn_body(value)) and not(is_baby_pkmn(value)) then "</b>" else "</b></color>" })
+
+	
+	#### Left position of the Attacks/Powers ####
+	
+	power_left :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.pokemon_attackpower_combination == "2 Powers" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 0 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks"
+					then 40
+					else 0
+				else 0
+		}
+	attack_rule_left :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks"
+					then attack_cost_left() + attack_cost_width() + text_area_fields_x_offset()
+					else 0
+				else
+				if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack"
+					then attack_cost_left() + attack_cost_width() + text_area_fields_x_offset()
+				else 0
+		}
+	
+	
+	attack1_damage_left :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.attack1_damage_exist == "yes"
+					then attack_rule_left() + attack_rule_width_withdamage() + text_area_fields_y_offset()
+					else 0
+				else 0
+		}
+	
+
+	attack2_damage_left :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.attack2_damage_exist == "yes"
+					then attack_rule_left() + attack_rule_width_withdamage() + text_area_fields_y_offset()
+					else 0
+				else 0
+		}
+	
+	attack3_damage_left :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.attack3_damage_exist == "yes"
+					then attack_rule_left() + attack_rule_width_withdamage() + text_area_fields_y_offset()
+					else 0
+				else 0
+		}
+
+
+	#### Top position of the Attacks/Powers ####
+	
+	power1_top :=
+	{
+		if card.card_type_select == "Pokemon"
+			then
+			if card.pokemon_attackpower_combination == "2 Powers" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 0 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks"
+				then text_area_top()
+			else 0
+		else 0
+	}
+	power2_top :=
+	{
+		if card.card_type_select == "Pokemon"
+			then
+			if card.pokemon_attackpower_combination == "2 Powers"
+				then power1_top() + power1_height() + text_area_fields_y_offset()
+				else 0
+			else 0
+	}
+	
+	attack1_top :=
+	{
+		if card.card_type_select == "Pokemon"
+			then
+			if card.pokemon_attackpower_combination == "1 Power 1 Attack"
+				then
+				if card.attack1_damage_exist == "yes"
+					then
+					if length(remove_tags(card.power1_rules)) > input_2_power_line_max_2()
+						then
+						if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+							then text_area_top() + text_area_height() / 5 * 3 + text_area_fields_y_offset()
+							else text_area_top() + text_area_height() / 2 + text_area_fields_y_offset()
+						else
+						if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+							then text_area_top() + text_area_height() / 2 + text_area_fields_y_offset()
+							else text_area_top() + text_area_height() / 5 * 2 - 8 + text_area_fields_y_offset()
+					else
+						if length(remove_tags(card.power1_rules)) > input_2_power_line_max_2()
+							then
+							if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+								then text_area_top() + text_area_height() / 5 * 3 + text_area_fields_y_offset()
+								else text_area_top() + text_area_height() / 2 + text_area_fields_y_offset()
+							else
+							if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+								then text_area_top() + text_area_height() / 2 + text_area_fields_y_offset()
+								else text_area_top() + text_area_height() / 5 * 2 - 8 + text_area_fields_y_offset()
+				else
+				if card.pokemon_attackpower_combination == "1 Power 2 Attacks"
+					then power1_top() + power1_height() + text_area_fields_y_offset()
+					else
+					if card.pokemon_attackpower_combination == "1 Power 0 Attacks"
+						then 0
+						else text_area_top()
+			else
+			if card.card_type_select == "Trainer"
+				then
+				if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack"
+					then 474 + card_style.trainer_rules.height + text_area_fields_y_offset()
+					else 0
+				else 0
+	}
+				
+	attack2_top :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks"
+					then attack1_top() + attack1_height() + text_area_fields_y_offset()
+					else 0
+				else 0
+		}
+		
+	attack3_top :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.pokemon_attackpower_combination == "3 Attacks"
+					then attack2_top() + attack2_height() + text_area_fields_y_offset()
+					else 0
+				else 0
+		}
+	
+	#### Width of the Attacks/Powers ####
+	
+	power1_width :=
+	{
+		if card.card_type_select == "Pokemon"
+			then
+			if card.pokemon_attackpower_combination == "2 Powers" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 0 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks"
+				then 523
+				else 0
+			else 0
+	}
+
+	#### Height of the Attacks/Powers ####
+
+	power1_height :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.pokemon_attackpower_combination == "1 Power 0 Attacks"
+					then text_area_height()
+					else
+					if card.pokemon_attackpower_combination == "2 Powers"
+						then if is_baby_pkmn(card.power1_rules)
+							then
+								text_area_height() / 5 * 2 - 4
+							else
+								if length(remove_tags(card.power1_rules)) > input_2_power_line_max_2()
+									then
+										if length(remove_tags(card.power2_rules)) <= input_2_attack_line_max_3()
+											then text_area_height() / 5 * 3
+											else text_area_height() / 2
+									else
+										if length(remove_tags(card.power2_rules)) <= input_2_attack_line_max_3()
+											then text_area_height() / 2
+											else text_area_height() / 5 * 2 - 8
+						else
+						if card.pokemon_attackpower_combination == "1 Power 1 Attack"
+							then
+							if card.attack1_damage_exist == "yes"
+								then
+								if length(remove_tags(card.power1_rules)) > input_2_power_line_max_2()
+									then
+									if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+										then text_area_height() / 5 * 3
+										else text_area_height() / 2
+									else
+									if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+										then text_area_height() / 2
+										else text_area_height() / 5 * 2 - 8
+								else
+								if length(remove_tags(card.power1_rules)) > input_2_power_line_max_2()
+									then
+									if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+										then text_area_height() / 5 * 3
+										else text_area_height() / 2
+									else
+									if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+										then text_area_height() / 2
+										else text_area_height() / 5 * 2 - 8
+							else
+							if card.pokemon_attackpower_combination == "1 Power 2 Attacks"
+									then
+									if length(remove_tags(card.power1_rules)) > input_3_power_line_max_1()
+										then
+										if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+											then
+											if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+												then text_area_height() / 3 - 2
+												else text_area_height() / 3 - 2 + 12
+											else
+											if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+												then text_area_height() / 3 - 2 + 12
+												else text_area_height() / 3 - 2 + 28
+										else
+										if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+											then
+											if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+												then text_area_height() / 3 - 2 - 28
+												else text_area_height() / 3 - 2 - 16
+											else
+											if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+												then text_area_height() / 3 - 2 - 16
+												else text_area_height() / 3 - 2
+									else 0
+								else 0
+		}
+	power2_height := 
+	{
+		if card.card_type_select == "Pokemon"
+			then
+			if card.pokemon_attackpower_combination == "2 Powers"
+				then text_area_height() - power1_height() - 4
+				else 0
+			else 0
+	}
+		
+	attack1_height :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.pokemon_attackpower_combination == "1 Power 1 Attack"
+					then
+					if card.attack1_damage_exist == "yes"
+						then
+						if length(remove_tags(card.power1_rules)) > input_2_power_line_max_2()
+							then
+								if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+									then text_area_height() / 5 * 2 - 4
+									else text_area_height() / 2 - 4
+								else
+								if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+									then text_area_height() / 2 - 4
+									else text_area_height() / 5 * 3 + 4
+						else
+						if length(remove_tags(card.power1_rules)) > input_2_power_line_max_2()
+							then
+								if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+									then text_area_height() / 5 * 2 - 4
+									else text_area_height() / 2 - 4
+								else
+								if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+									then text_area_height() / 2 - 4
+									else text_area_height() / 5 * 3 + 4
+					else
+					if card.pokemon_attackpower_combination == "1 Attack"
+						then text_area_height()
+						else
+						if card.pokemon_attackpower_combination == "2 Attacks"
+							then
+							if card.attack1_damage_exist == "yes"
+								then
+								if card.attack2_damage_exist == "yes"
+									then
+									if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+										then
+										if length(remove_tags(card.attack2_rules)) <= input_2_attack_line_max_3()
+											then text_area_height() / 2
+											else text_area_height() / 5 * 2
+										else
+										if length(remove_tags(card.attack2_rules)) <= input_2_attack_line_max_3()
+											then text_area_height() / 5 * 3
+											else text_area_height() / 2
+									else
+									if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3()
+										then
+										if length(remove_tags(card.attack2_rules)) <= input_2_attack_line_max_3() + 31
+											then text_area_height() / 2
+											else text_area_height() / 5 * 2
+										else
+										if length(remove_tags(card.attack2_rules)) <= input_2_attack_line_max_3() + 31
+											then text_area_height() / 5 * 3
+											else text_area_height() / 2
+								else
+								if card.attack2_damage_exist == "yes"
+									then
+									if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3() + 31
+										then
+										if length(remove_tags(card.attack2_rules)) <= input_2_attack_line_max_3()
+											then text_area_height() / 2
+											else text_area_height() / 5 * 2
+										else
+										if length(remove_tags(card.attack2_rules)) <= input_2_attack_line_max_3()
+											then text_area_height() / 5 * 3
+											else text_area_height() / 2
+									else
+									if length(remove_tags(card.attack1_rules)) <= input_2_attack_line_max_3() + 31
+										then
+										if length(remove_tags(card.attack2_rules)) <= input_2_attack_line_max_3() + 31
+											then text_area_height() / 2
+											else text_area_height() / 5 * 2
+										else
+										if length(remove_tags(card.attack2_rules)) <= input_2_attack_line_max_3() + 31
+											then text_area_height() / 5 * 3
+											else text_area_height() / 2
+							else
+							if card.pokemon_attackpower_combination == "3 Attacks"
+								then
+								if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+									then
+									if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+										then
+										if length(remove_tags(card.attack3_rules)) > input_3_attack_line_max_2()
+											then text_area_height() /3-2
+											else text_area_height() /3-2+12
+										else
+											if length(remove_tags(card.attack3_rules)) > input_3_attack_line_max_2()
+												then text_area_height() /3-2+12
+												else text_area_height() /3-2+28
+									else
+									if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+											then
+											if length(remove_tags(card.attack3_rules)) > input_3_attack_line_max_2()
+												then text_area_height() /3-2-28
+												else text_area_height() /3-2-16
+											else
+											if length(remove_tags(card.attack3_rules)) > input_3_attack_line_max_2()
+												then text_area_height() /3-2-16
+												else text_area_height() /3-2
+								else
+								if card.pokemon_attackpower_combination == "1 Power 2 Attacks"
+									then
+									if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+										then
+										if length(remove_tags(card.power1_rules)) > input_3_power_line_max_1()
+											then
+											if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+												then text_area_height() /3-2
+												else text_area_height() /3-2+12
+											else
+											if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+												then text_area_height() /3-2+12
+												else text_area_height() /3-2+28
+										else
+										if length(remove_tags(card.power1_rules)) > input_3_power_line_max_1()
+											then
+											if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+												then text_area_height() /3-2-28
+												else text_area_height() /3-2-16
+											else
+											if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+												then text_area_height() /3-2-16
+												else text_area_height() /3-2
+									else 0
+				else
+				if card.card_type_select == "Trainer"
+					then
+					if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack"
+						then text_area_height() / 5 * 3
+						else 0
+					else 0
+		}
+		
+	attack2_height :=
+		{
+			if card.card_type_select == "Pokemon"
+				then
+				if card.pokemon_attackpower_combination == "2 Attacks"
+					then text_area_height() - attack1_height() - 4
+					else
+					if card.pokemon_attackpower_combination == "3 Attacks"
+						then
+						if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+							then
+							if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+								then
+								if length(remove_tags(card.attack3_rules)) > input_3_attack_line_max_2()
+									then text_area_height() /3-2
+									else text_area_height() /3-2+12
+								else
+								if length(remove_tags(card.attack3_rules)) > input_3_attack_line_max_2()
+									then text_area_height() /3-2+12
+									else text_area_height() /3-2+28
+							else
+							if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+								then
+								if length(remove_tags(card.attack3_rules)) > input_3_attack_line_max_2()
+									then text_area_height() /3-2-28
+									else text_area_height() /3-2-16
+								else
+								if length(remove_tags(card.attack3_rules)) > input_3_attack_line_max_2()
+									then text_area_height() /3-2-16
+									else text_area_height() /3-2
+						else
+						if card.pokemon_attackpower_combination == "1 Power 2 Attacks"
+							then
+							if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+								then
+								if length(remove_tags(card.power1_rules)) > input_3_power_line_max_1()
+									then
+									if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+										then text_area_height() /3-2
+										else text_area_height() /3-2+12
+									else
+									if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+										then text_area_height() /3-2+12
+										else text_area_height() /3-2+28
+								else
+								if length(remove_tags(card.power1_rules)) > input_3_power_line_max_1()
+											then
+											if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+												then text_area_height() /3-2-28
+												else text_area_height() /3-2-16
+											else
+											if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+												then text_area_height() /3-2-16
+												else text_area_height() /3-2
+				else 0
+			else 0
+		}
+		
+	attack3_height :=
+	{
+		if card.card_type_select == "Pokemon"
+			then
+			if card.pokemon_attackpower_combination == "3 Attacks"
+				then
+				if length(remove_tags(card.attack3_rules)) > input_3_attack_line_max_2()
+					then
+					if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+						then
+						if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+							then text_area_height() /3-2
+							else text_area_height() /3-2+12
+						else
+						if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+							then text_area_height() /3-2+12
+							else text_area_height() /3-2+28
+					else
+					if length(remove_tags(card.attack1_rules)) > input_3_attack_line_max_2()
+						then
+						if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+							then text_area_height() /3-2-28
+							else text_area_height() /3-2-16
+						else
+						if length(remove_tags(card.attack2_rules)) > input_3_attack_line_max_2()
+							then text_area_height() /3-2-16
+							else text_area_height() /3-2
+				else 0
+			else 0
+	}
+	trainer_height := 
+	{
+		if card.card_type_select == "Trainer"
+			then
+			if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack"
+				then
+				235 / 5 * 2
+				else
+				if card.trainer_type_select == "With HP"
+					then "283"
+					else 
+					if card.trainer_type_select != "Regular"
+						then "230"
+						else "280"
+			else 0 }
+
 card style:
+	card_type_select:
+		left: 0
+		top: 0
+		width: 40
+		height: 40
+		z index: 5
+
+	pokemon_type_select:
+		left: {card_style.card_frame.width - 40}
+		top: 0
+		width: {if card.card_type_select == "Pokemon" then 40 else 0}
+		height: {if card.card_type_select == "Pokemon" then 40 else 0}
+		z index: 5
+		popup style: in place
+		render style: hidden
+		visible: {if card.card_type_select == "Pokemon" then true else false}
+	
+	energy_type_select:
+		left: {card_style.card_frame.width - 40}
+		top: 0
+		width: {if card.card_type_select == "Energy" then 40 else 0}
+		height: {if card.card_type_select == "Energy" then 40 else 0}
+		z index: 5
+		popup style: in place
+		render style: hidden
+		visible: {if card.card_type_select == "Energy" then true else false}
+		
+	trainer_type_select:
+		left: {card_style.card_frame.width - 40}
+		top: 0
+		width: {if card.card_type_select == "Trainer" then 40 else 0}
+		height: {if card.card_type_select == "Trainer" then 40 else 0}
+		z index: 5
+		popup style: in place
+		render style: hidden
+		visible: {if card.card_type_select == "Trainer" then true else false}
+		
 	card_frame:
 		left: 0
 		top: 0
 		width: 600
 		height: 825
 		z index: 0
-		mask: frame_mask.png
-		popup style: in place
 		render style: image
 		choice images:
-			Pokemon Colorless: frame_pokemon_colorless.png
-			Pokemon Darkness: frame_pokemon_darkness.png
-			Pokemon Dragon: frame_pokemon_dragon.png
-			Pokemon Fairy: frame_pokemon_fairy.png
-			Pokemon Fighting: frame_pokemon_fighting.png
-			Pokemon Fire: frame_pokemon_fire.png
-			Pokemon Grass: frame_pokemon_grass.png
-			Pokemon Lightning: frame_pokemon_lightning.png
-			Pokemon Metal: frame_pokemon_metal.png
-			Pokemon Psychic: frame_pokemon_psychic.png
-			Pokemon Water: frame_pokemon_water.png
-			
-			Energy Double Colorless: frame_energy_doublecolorless.png
-			Energy Colorless: frame_energy_colorless.png
-			Energy Darkness: frame_energy_darkness.png
-			Energy Double Dragon: frame_energy_doubledragon.png
-			Energy Fairy: frame_energy_fairy.png
-			Energy Fighting: frame_energy_fighting.png
-			Energy Fire: frame_energy_fire.png
-			Energy Grass: frame_energy_grass.png
-			Energy Lightning: frame_energy_lightning.png
-			Energy Metal: frame_energy_metal.png
-			Energy Psychic: frame_energy_psychic.png
-			Energy Water: frame_energy_water.png
-			
-			Trainer: frame_trainer.png
-	build_exportname:
+			Pokemon Colorless: frame-pokemon-colorless.png
+			Pokemon Darkness: frame-pokemon-darkness.png
+			Pokemon Dragon: frame-pokemon-dragon.png
+			Pokemon Fairy: frame-pokemon-fairy.png
+			Pokemon Fighting: frame-pokemon-fighting.png
+			Pokemon Fire: frame-pokemon-fire.png
+			Pokemon Grass: frame-pokemon-grass.png
+			Pokemon Lightning: frame-pokemon-lightning.png
+			Pokemon Metal: frame-pokemon-metal.png
+			Pokemon Psychic: frame-pokemon-psychic.png
+			Pokemon Water: frame-pokemon-water.png
+			Pokemon G-SPEC: frame-pokemon-gspec.png
+			Pokemon G-SPEC Lightning: frame-pokemon-gspec-lightning.png
+			Pokemon Crystal Type: frame-pokemon-crystal.png
+			Energy Double Colorless: frame-energy-doublecolorless.png
+			Energy Colorless Special: frame-energy-colorless.png
+			Energy Darkness: frame-energy-darkness.png
+			Energy Darkness Special: frame-energy-darkness-special.png
+			Energy Double Dragon: frame-energy-doubledragon.png
+			Energy Fairy: frame-energy-fairy.png
+			Energy Fighting: frame-energy-fighting.png
+			Energy Fire: frame-energy-fire.png
+			Energy Grass: frame-energy-grass.png
+			Energy Lightning: frame-energy-lightning.png
+			Energy Metal: frame-energy-metal.png
+			Energy Metal Special: frame-energy-metal-special.png
+			Energy Psychic: frame-energy-psychic.png
+			Energy Water: frame-energy-water.png
+			Energy Rainbow Special: frame-energy-rainbow.png
+			Energy Double Rainbow: frame-energy-doublerainbow.png
+			Energy G-SPEC: frame-energy-gspec.png
+			Trainer: frame-trainer.png
+			Trainer G-SPEC: frame-trainer-gspec.png
+	exportname:
 		left: 0
 		top: 0
 		visible: false
 	name:
 		left: 45
-		top: 35
-		width: 355
-		height: 32
+		top: 28
+		width: {if card.card_type_select == "Trainer" then if card.trainer_type_select == "With HP" then 280 else 362 else if card.card_type_select == "Energy" then 370 else 355}
+		height: 35
 		z index: 3
 		alignment: middle left shrink-overflow
-		font: 
-			name: Gill Sans
+		font:
+			name: Gill Sans Std
 			size: 26
 			color: rgb(255, 255, 255)
-			scale down to: 24
+			scale down to: 12
 			shadow color: rgb(0,0,0)
-			shadow displacement x:  -2
+			shadow displacement x: -2
 			shadow displacement y: 2
-			shadow blur: 4
-			weight:bold
+			shadow blur: 3
+			weight: bold
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: 28
+			alignment: middle center
+			scale down to: 12
 	hp:
-		left: 410
-		top: 35
-		width: 105
-		height: 32
+		left: {if card.card_type_select == "Trainer" and card.trainer_type_select == "With HP" then 292 else if card.card_type_select == "Energy" then 0 else 400}
+		top: {if card.card_type_select == "Trainer" and card.trainer_type_select == "With HP" or card.card_type_select == "Pokemon" then 28 else 0}
+		width: {if card.card_type_select == "Trainer" and card.trainer_type_select == "With HP" then 115 else if card.card_type_select == "Pokemon" then 115 else 0}
+		height: {if card.card_type_select == "Trainer" and card.trainer_type_select == "With HP" or card.card_type_select == "Pokemon" then 35 else 0}
 		z index: 3
 		alignment: middle right
-		font: 
-			name: Gill Sans
-			size: 23
+		font:
+			name: Gill Sans Std
+			size: 26
 			color: rgb(255, 255, 255)
 			shadow color: rgb(0,0,0)
-			shadow displacement x:  -2
+			shadow displacement x: -2
 			shadow displacement y: 2
 			shadow blur: 4
 			weight: bold
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
-	card_subtype:
-		left: 45
-		top: 478
-		width: 390
-		height: 27
+		visible: {if card.card_type_select == "Pokemon" then true else if card.card_type_select == "Trainer" and card.trainer_type_select == "With HP" then true else false}
+		
+	trainer_card_symbol:
+		right: {if card.card_type_select == "Trainer" then card_style.card_frame.width - 45 else 0}
+		top: 28
+		width: {if card.card_type_select == "Trainer" then 140 else 0}
+		height: 35
 		z index: 3
-		alignment: middle left shrink-overflow
-		font: 
-			name: Gill Sans
-			size: 17
-			scale down to: 14
+		alignment: middle right
+		font:
+			name: Gill Sans Std
+			size: 22
 			color: rgb(255, 255, 255)
 			shadow color: rgb(0,0,0)
-			shadow displacement x:  -2
+			shadow displacement x: -2
+			shadow displacement y: 2
+			shadow blur: 4
+			weight: bold
+		visible: {if card.card_type_select == "Trainer" then true else false}
+	card_subtype:
+		left: 45
+		top: 415
+		width: 390
+		height: 33
+		z index: 3
+		alignment: middle left shrink-overflow
+		line height hard: 0.75
+		font:
+			name: Gill Sans Std
+			size: 18
+			scale down to: 13
+			color: rgb(255, 255, 255)
+			shadow color: rgb(0,0,0)
+			shadow displacement x: -2
 			shadow displacement y: 2
 			shadow blur: 4
 			weight: bold
 	set_number:
-		left: 470
-		top: 478
+		left: {text_area_top() }
+		top: 415
 		width: 83
-		height: 27
+		height: 33
 		z index: 3
 		alignment: middle right
-		font: 
-			name: Gill Sans
-			size: 17
+		font:
+			name: Gill Sans Std
+			size: 18
 			color: rgb(255, 255, 255)
 			shadow color: rgb(0,0,0)
 			shadow displacement x: -2
@@ -123,285 +704,488 @@ card style:
 			shadow blur: 4
 			weight: bold
 	dex_entry:
-		left: 52
-		top: 711
-		width: 494
-		height: 44
+		left: {if card.card_type_select == "Pokemon" then 38 else 0}
+		top: {if card.card_type_select == "Pokemon" then 684 else 0}
+		width: {if card.card_type_select == "Pokemon" then 523 else 0}
+		height: {if card.card_type_select == "Pokemon" then 48 else 0}
 		z index: 3
 		alignment: top center shrink-overflow
-		font: 
-			name: Gill Sans Italic
-			size: 14
+		font:
+			name: Gill Sans Std
+			style: italic
+			size: 18
 			color: rgb(0, 0, 0)
 			scale down to: 12
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
-	supporter_rules:
-		left: 52
-		top: 711
-		width: 494
-		height: 44
-		z index: 2
-		alignment: top center shrink-overflow
-		font: 
-			name: Gill Sans Italic
-			size: 12
-			color: rgb(0, 0, 0)
-			scale down to: 10
-		visible: { if card.card_subtype = "Supporter" then true else false }
+		visible: {if card.card_type_select == "Pokemon" then true else false}
+
 	artist_name:
-		left: 40
-		top: 765
-		width: { if card.card_frame = "Trainer" then 380 else 280 }
-		height: 18
+		left: 72
+		top: 795
+		width: { if set.language == "English" then 290 else 260 }
+		height: { if card_style.artist_name.content_lines > 1 then 23 else 18 }
 		z index: 3
-		alignment: bottom left
-		font: 
-			name: Gill Sans
-			size: 9
+		alignment: bottom left shrink-overflow
+		font:
+			name: Gill Sans Std
+			size: 11
 			color: rgb(255, 255, 255)
 			weight: bold
-	artist_role:
-		left: 76
-		top: 786
-		width: 80
-		height: 13
+			scale down to: 8
+			
+	copyright:
+		right: {card_style.card_frame.width - 22}
+		top: 795
+		width: 120
+		height: 18
 		z index: 3
-		alignment: middle left
-		font: 
-			name: Gill Sans Italic
+		alignment: bottom right
+		font:
+			name: Gill Sans Std
+			style: italic
 			size: 10
 			color: rgb(255, 255, 255)
 			weight: bold
-	weakness:
-		left: 420
-		top: 770
-		width: 30
-		height: 30
+			
+	weakness_type:
+		left: 112
+		top: 747
+		width: 32
+		height: 32
 		z index: 3
 		alignment: middle center
-		font: 
-			name: Pokemon TCG Symbols _2018 U
-			size: 20
-			color: rgb(255, 255, 255)
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
-	resistance:
-		left: 472
-		top: 770
-		width: 23
-		height: 30
+		always symbol: true
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: 22
+		visible: {if card.card_type_select == "Pokemon" then true else false}
+		
+	weakness_text:
+		left: 87
+		top: {card_style.card_frame.height - 50}
+		width: 86
+		height: 20
 		z index: 3
-		alignment: middle left
-		font: 
-			name: Pokemon TCG Symbols _2018 U
+		visible: { if card.card_type_select == "Pokemon" then true else false }
+		alignment: bottom center
+		font:
+			name: Gill Sans Std
+			size: 14
+			color: rgb(255, 255, 255)
+			weight: bold
+		
+	resistance_type:
+		left: 270
+		top: 747
+		width: 32
+		height: 32
+		z index: 3
+		alignment: middle center
+		visible: {if card.card_type_select == "Pokemon" then true else false}
+		always symbol: true
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: 22
+		
+	resistance_value:
+		left: {card_style.resistance_type.left + 32}
+		top: {card_style.resistance_type.top - 2}
+		width: 38
+		height: 32
+		z index: 3
+		alignment: middle center
+		visible: {if card.card_type_select == "Pokemon" then if card.resistance_type !="" then true else false else false }
+		font:
+			name: Gill Sans Std
 			size: 18
 			color: rgb(255, 255, 255)
-			scale down to: 18
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
-	rarity:
-		left: 440
-		top: 479
-		width: 27
-		height: 27
+			weight: bold
+		
+	resistance_text:
+		left: 258
+		top: {card_style.card_frame.height - 50}
+		width: 96
+		height: 20
 		z index: 3
-		popup style: in place
-		render style: image
-		choice images:
-			Basic Energy: 
-			Common: rarity_common.png
-			Uncommon: rarity_uncommon.png
-			Rare: rarity_rare.png
-			Rare Holo: rarity_rareholo.png
+		visible: {if card.card_type_select == "Pokemon" then true else false }
+		alignment: bottom center
+		font:
+			name: Gill Sans Std
+			size: 14
+			color: rgb(255, 255, 255)
+			weight: bold
+		
+	retreatcost_value:
+		left: 420
+		top: 746
+		width: 142
+		height: 34
+		z index: 3
+		alignment: middle center
+		visible: {if card.card_type_select == "Pokemon" then true else false}
+		always symbol: true
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: 22
+	
+	retreatcost_text:
+		left: 400
+		top: {card_style.card_frame.height - 50}
+		width: 180
+		height: 20
+		z index: 3
+		alignment: bottom center shrink-overflow
+		visible: {if card.card_type_select == "Pokemon" then true else false}
+		font:
+			name: Gill Sans Std
+			size: 14
+			color: rgb(255, 255, 255)
+			weight: bold
 			
-	pokémod_logo:
-		left: 410
-		top: 426
-		width: 141
-		height: 39
+	rarity:
+		left: 435
+		top: 418
+		width: 28
+		height: 28
 		z index: 3
 		popup style: in place
-		render style: image list
-		choice images:
-			White: logo_pokemod_white.png
-			Red: logo_pokemod_red.png
-			None: 
-	retreat_cost:
-		left: 530
-		top: 769
-		width: 30
-		height: 30
-		z index: 3
-		popup style: dropdown
 		render style: image
 		choice images:
-			0: 
-			1: retreatcost_1.png
-			2: retreatcost_2.png
-			3: retreatcost_3.png
-			4: retreatcost_4.png
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then false else true }
-	resistance_value:
-		left: 490
-		top: 770
-		width: 25
-		height: 30
+			Basic Energy: rarity-basicenergy.png
+			Common: rarity-common.png
+			Uncommon: rarity-uncommon.png
+			Rare: rarity-rare.png
+			Secret Rare: rarity-rareholo.png
+			
+	pokemod_logo:
+		left: {if set.default_set_symbol == "Pokemod" then 406 else 0}
+		top: {if set.default_set_symbol == "Pokemod" then 364 else 0}
+		width: {if set.default_set_symbol == "Pokemod" then 141 else 0}
+		height: {if set.default_set_symbol == "Pokemod" then 39 else 0}
 		z index: 3
 		popup style: in place
 		render style: image list
+		visible: {if set.default_set_symbol == "Pokemod" then true else false}
 		choice images:
-			-30: resistance.png
-		visible: { if card.resistance !="" then true else false }
+			White: logo-pokemod-white.png
+			Red: logo-pokemod-red.png
+			Green: logo-pokemod-green.png
+			Blue: logo-pokemod-blue.png
+	
+	custom_logo:
+		left: {if set.default_set_symbol == "Custom" then 448 else 0}
+		top: {if set.default_set_symbol == "Custom" then 320 else 0}
+		width: {if set.default_set_symbol == "Custom" then 96 else 0}
+		height: {if set.default_set_symbol == "Custom" then 80 else 0}
+		z index: 3
+		render style: image list
+		visible: {if set.default_set_symbol == "Custom" then true else false}
+		choice images:
+			Custom 1: logo-custom1.png
+			Custom 2: logo-custom2.png
+			Custom 3: logo-custom3.png
+			Custom 4: logo-custom4.png
+			Custom 5: logo-custom5.png
+			Custom 6: logo-custom6.png
+		
 	art:
-		left: 47
+		left: 49
 		top: 77
-		width: 504
-		height: 386
+		width: 500
+		height: 330
 		z index: 1
-		mask: art_mask.png
-	attack1_cost:
-		left: 51
-		top: 525
-		width: 76
-		height: 84
+		mask: art-mask.png
+
+	pokemon_attackpower_combination:
+		left: 0
+		top: 417
+		width: 40
+		height: 40
+		z index: 5
+		popup style: in place
+		render style: hidden
+		visible: {if card.card_type_select == "Pokemon" then true else false}
+		
+	power1_rules:
+		left: {power_left()}
+		top: {power1_top()}
+		width: {power1_width()}
+		height: {power1_height()}
 		z index: 2
-		alignment: middle center
-		line height hard: 0.9
-		font: 
-			name: Pokemon TCG Symbols _2018 U
+		alignment: {if card.pokemon_attackpower_combination == "1 Power 0 Attacks" then "top left shrink-overflow" else "middle left shrink-overflow"}
+		allow formating: true
+		line height soft: 0.92
+		line height hard: 1.25
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: 26
+			alignment: middle center
+			scale down to: 11
+		font:
+			name: Gill Sans Std
 			size: 26
 			color: rgb(0, 0, 0)
-			scale down to: 20
-		visible: { if card.attack1_rules ="-none-" or card.attack1_rules = "-power-" or card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
-	attack2_cost:
-		left: 51
-		top: { if card.attack1_rules = "-none-" then 525 else 615 }
-		width: 76
-		height: { if card.attack1_rules ="-none-" then "168" else "84" }
+			scale down to: 11
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Power 0 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "2 Powers" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then true else false else false}
+		
+	power2_rules:
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Powers" then 40 else 0 else 0}
+		top: {power2_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Powers" then 523 else 0 else 0}
+		height: {power2_height()}
 		z index: 2
-		alignment: middle center
-		line height hard: 0.9
-		font: 
-			name: Pokemon TCG Symbols _2018 U
+		alignment: middle left shrink-overflow
+		allow formating: true
+		line height soft: 0.92
+		line height hard: 0.85
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: 26
+			alignment: middle center
+			scale down to: 11
+		font:
+			name: Gill Sans Std
 			size: 26
 			color: rgb(0, 0, 0)
-			scale down to: 20
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
+			scale down to: 11
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Powers" then true else false}
+		
 	attack1_rules:
-		left: 130
-		top: 525
-		width: { if card.attack1_damage ="-none-" then 408 else if card.attack1_rules = "-power-" then 0 else 340 }
-		height: { if card.attack1_rules ="-none-" or card.attack1_rules = "-power-" then "0" else "84" }
-		alignment: {if card_style.attack1_rules.content_width < 250 and card_style.attack1_rules.content_lines = 1 then "middle center shrink-overflow" else "middle left shrink-overflow" }
+		left: {attack_rule_left()}
+		top: {attack1_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then if card.attack1_damage_exist == "yes" then attack_rule_width_withdamage() else attack_rule_width_nodamage() else 0 else if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then if card.attack1_damage_exist == "yes" then attack_rule_width_withdamage() else attack_rule_width_nodamage() else 0}
+		height: {attack1_height()}
+		alignment: { if length(remove_tags(card.attack1_rules)) < input_2_attack_line_max_1() then "middle center shrink-overflow" else "middle left shrink-overflow" }
 		allow formating: true
-		line height soft: 0.85
-		font: 
-			name: Gill Sans
-			size: {if card_style.attack1_rules.content_lines = 1 then "25"  else "20"}
+		line height soft: 0.92
+		line height hard: 0.85
+		font:
+			name: Gill Sans Std
+			size: 26
 			color: rgb(0, 0, 0)
 			scale down to: 11
 		symbol font:
-			name: pokemod-thegathering-symbols
-			size: 20
-			alignment: top center
+			name: pokemod-thegathering-coloredsymbols
+			size: { if card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 28 else 32 }
+			alignment: middle center
 			scale down to: 11
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then true else false else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then true else false else false}
+		
 	attack2_rules:
-		left: 130
-		top: { if card.attack1_rules = "-none-" then 525 else 615 }
-		width: { if card.attack2_damage ="-none-" then 408 else 340 }
-		height: { if card.attack1_rules ="-none-" then "168" else "84" }
-		alignment: {if card_style.attack2_rules.content_width < 250 and card_style.attack2_rules.content_lines = 1  then "middle center shrink-overflow" else "middle left shrink-overflow" }
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then attack_rule_left() else 0 else 0}
+		top: {attack2_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then if card.attack2_damage_exist == "yes" then to_int(attack_rule_width_withdamage()) else to_int(attack_rule_width_nodamage()) else 0 else 0}
+		height: {attack2_height()}
+		alignment: { if length(remove_tags(card.attack2_rules)) < input_2_attack_line_max_1() then "middle center shrink-overflow" else "middle left shrink-overflow" }
 		allow formating: true
-		line height soft: 0.85
-		font: 
-			name: Gill Sans
-			size: {if card_style.attack2_rules.content_lines = 1 then "25"  else "20"}
+		line height soft: 0.92
+		line height hard: 0.85
+		font:
+			name: Gill Sans Std
+			size: 26
 			color: rgb(0, 0, 0)
 			scale down to: 11
 		symbol font:
-			name: pokemod-thegathering-symbols
-			size: 20
-			alignment: top center
+			name: pokemod-thegathering-coloredsymbols
+			size: { if card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 28 else 32 }
+			alignment: middle center
 			scale down to: 11
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
-	power_rules:
-		left: 51
-		top: 525
-		width: { if card.attack1_rules = "-power-" or card.attack1_rules = "-fullpower-" then "496" else "0"}
-		height: { if card.attack1_rules = "-power-" then "84" else if card.attack1_rules = "-fullpower-" then "168" else "0" }
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then true else false }
+		
+	attack3_rules:
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then attack_rule_left() else 0 else 0}
+		top: {attack3_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then if card.attack3_damage_exist == "yes" then attack_rule_width_withdamage() else attack_rule_width_nodamage() else 0 else 0}
+		height: {attack3_height()}
+		alignment: {if length(remove_tags(card.attack3_rules)) < input_2_attack_line_max_1() then "middle center shrink-overflow" else "middle left shrink-overflow" }
+		allow formating: true
+		line height soft: 0.92
+		line height hard: 0.85
+		font:
+			name: Gill Sans Std
+			size: 26
+			color: rgb(0, 0, 0)
+			scale down to: 11
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: { if card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 28 else 32 }
+			alignment: middle center
+			scale down to: 11
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then true else false else false}
+		
+	attack1_cost:
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then attack_cost_left() else 0 else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then attack_cost_left() else 0 else 0}
+		top: {attack1_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then attack_cost_width() else 0 else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then attack_cost_width() else 0 else 0}
+		height: {attack1_height()}
 		z index: 2
-		alignment: { if card.attack1_rules = "-fullpower-" then "top left shrink-overflow" else "middle left shrink-overflow" }
-		allow formating: true
-		line height soft: 0.85
+		alignment: middle center
+		always symbol: true
 		symbol font:
-			name: pokemod-thegathering-symbols
-			size: 20
-			alignment: top center
-			scale down to: 12
-		font: 
-			name: Gill Sans
-			size: 20
-			color: rgb(0, 0, 0)
-			scale down to: 12
-		visible: { if card.attack1_rules = "-power-" or card.attack1_rules = "-fullpower-" then true else false }
+			name: pokemod-thegathering-coloredsymbols
+			size: { if card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 23 else 28 }
+			scale down to: 18
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then true else false else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then true else false else false}
+	attack2_cost:
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then attack_cost_left() else 0 else 0}
+		top: {attack2_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then attack_cost_width() else 0 else 0}
+		height: {attack2_height()}
+		z index: 2
+		alignment: middle center
+		always symbol: true
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: { if card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 23 else 28 }
+			scale down to: 18
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" then true else if card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then true else false else false}
+	attack3_cost:
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then attack_cost_left() else 0 else 0}
+		top: {attack3_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then attack_cost_width() else 0 else 0}
+		height: {attack3_height()}
+		z index: 2
+		alignment: middle center
+		always symbol: true
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: { if card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 23 else 28 }
+			scale down to: 18
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then true else false else false}
+		
+	attack1_damage_exist:
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then card_style.card_frame.width - 40 else 0 else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then card_style.card_frame.width - 40 else 0 else 0}
+		top: {attack1_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 40 else 0 else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then 40 else 0 else 0}
+		height: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 40 else 0 else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then 40 else 0 else 0}
+		z index: 5
+		popup style: in place
+		render style: hidden
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then true else false else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then true else false else false}
 	attack1_damage:
-		left: 472
-		top: 525
-		width: 76
-		height: { if card.attack1_damage ="-none-" or card.attack1_rules ="-power-" then "0" else "84" }
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then if card.attack1_damage_exist == "yes" then attack1_damage_left() else 0 else 0 else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then if card.attack1_damage_exist == "yes" then card_style.attack1_rules.left + card_style.attack1_rules.width + text_area_fields_y_offset() else 0 else 0 else 0}
+		top: {attack1_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then if card.attack1_damage_exist == "yes" then attack_damage_width() else 0 else 0 else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then if card.attack1_damage_exist == "yes" then attack_damage_width() else 0 else 0 else 0}
+		height: {attack1_height()}
 		z index: 2
 		alignment: middle center
-		font: 
-			name: Gill Sans
-			size: 28
+		font:
+			name: Gill Sans Std
+			size: 30
 			color: rgb(0, 0, 0)
 			weight: bold
-		visible: { if card.attack1_rules ="-none-" or card.attack1_rules ="-power-" or card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "1 Attack" or card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then if card.attack1_damage_exist == "yes" then true else false else false else if card.card_type_select == "Trainer" then if card.trainer_type_select == "Stadium with Attack" or card.trainer_type_select == "Technical Machine" or card.trainer_type_select == "G-SPEC with Attack" then if card.attack1_damage_exist == "yes" then true else false else false else false}
+		
+	attack2_damage_exist:
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then card_style.card_frame.width - 40 else 0 else 0}
+		top: {attack2_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 40 else 0 else 0}
+		height: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then 40 else 0 else 0}
+		z index: 5
+		popup style: in place
+		render style: hidden
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then true else false else false}
 	attack2_damage:
-		left: 472
-		top: { if card.attack1_rules = "-none-" then 525 else 615 }
-		width: 76
-		height: { if card.attack2_damage ="-none-" then "0" else if card.attack1_rules ="-none-" then "168" else "84" }
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then if card.attack2_damage_exist == "yes" then attack2_damage_left() else 0 else 0 else 0}
+		top: {attack2_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then if card.attack2_damage_exist == "yes" then attack_damage_width() else 0 else 0 else 0}
+		height: {attack2_height()}
 		z index: 2
 		alignment: middle center
-		font: 
-			name: Gill Sans
-			size: 28
+		font:
+			name: Gill Sans Std
+			size: 30
 			color: rgb(0, 0, 0)
 			weight: bold
-		visible: { if card.card_frame = "Trainer" or card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" or card.attack1_rules = "-fullpower-" then false else true }
-	trainer_rules:
-		left: 51
-		top: 525
-		width: { if card.card_frame != "Trainer" then 0 else 495 }
-		height: { if card.card_frame != "Trainer" then 0 else if card.card_subtype = "Supporter" then "168" else "212" }
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "2 Attacks" or card.pokemon_attackpower_combination == "3 Attacks" or card.pokemon_attackpower_combination == "1 Power 1 Attack" or card.pokemon_attackpower_combination == "1 Power 2 Attacks" then if card.attack2_damage_exist == "yes" then true else false else false else false}
+	
+	attack3_damage_exist:
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then card_style.card_frame.width - 40 else 0 else 0}
+		top: {attack3_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then 40 else 0 else 0}
+		height: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then 40 else 0 else 0}
+		z index: 5
+		popup style: in place
+		render style: hidden
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then true else false else false}
+	attack3_damage:
+		left: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then if card.attack3_damage_exist == "yes" then attack3_damage_left() else 0 else 0 else 0}
+		top: {attack3_top()}
+		width: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then if card.attack3_damage_exist == "yes" then attack_damage_width() else 0 else 0 else 0}
+		height: {attack3_height()}
 		z index: 2
-		alignment: {if card_style.trainer_rules.content_lines = 1 then "top center shrink-overflow" else "top left shrink-overflow" }
-		font: 
-			name: Gill Sans
+		alignment: middle center
+		font:
+			name: Gill Sans Std
+			size: 30
+			color: rgb(0, 0, 0)
+			weight: bold
+		visible: {if card.card_type_select == "Pokemon" then if card.pokemon_attackpower_combination == "3 Attacks" then if card.attack3_damage_exist == "yes" then true else false else false else false}
+		
+	trainer_rules:
+		left: {if card.card_type_select == "Trainer" then 38 else 0}
+		top: {if card.card_type_select == "Trainer" then text_area_top() else 0}
+		width: {if card.card_type_select == "Trainer" then 523 else 0}
+		height: {trainer_height()}
+		z index: 2
+		alignment: {if card_style.trainer_rules.content_lines == 1 then "top center shrink-overflow" else "top left shrink-overflow" }
+		line height hard: 1.5
+		line height soft: 1
+		font:
+			name: Gill Sans Std
 			size: 23
 			color: rgb(0, 0, 0)
 			scale down to: 12
 		symbol font:
-			name: pokemod-thegathering-symbols
-			size: 20
-			alignment: top center
+			name: pokemod-thegathering-coloredsymbols
+			size: 32
+			alignment: middle center
 			scale down to: 12
-		visible: { if card.card_frame != "Trainer" then false else true }
+		visible: {if card.card_type_select == "Trainer" then true else false}
+	extra_trainer_rules:
+		left: {if card.card_type_select == "Trainer" then 42 else 0}
+		top: {if card.card_type_select == "Trainer" then 708 else 0}
+		width: {if card.card_type_select == "Trainer" then 515 else 0}
+		height: {if card.card_type_select == "Trainer" then 52 else 0}
+		z index: 2
+		alignment: top center shrink-overflow
+		font:
+			name: Gill Sans Std
+			style: italic
+			size: 18
+			color: rgb(0, 0, 0)
+			scale down to: 14
+		visible: {if card.card_type_select == "Trainer" then if card.trainer_type_select != "Regular" then true else false else false}
+	
 	energy_rules:
-		left: 51
-		top: 525
-		width: { if card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then 495 else 0 }
-		height: { if card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then "212" else 0 }
+		left: {if card.card_type_select == "Energy" then if contains(card.energy_type_select, match: "Double") or contains(card.energy_type_select, match: "Special") or contains(to_string(card.energy_type_select), match: "G-SPEC") then 38 else 0 else 0}
+		top: {if card.card_type_select == "Energy" then if contains(card.energy_type_select, match: "Double") or contains(card.energy_type_select, match: "Special") or contains(to_string(card.energy_type_select), match: "G-SPEC") then 474 else 0 else 0}
+		width: {if card.card_type_select == "Energy" then if contains(to_string(card.energy_type_select), match: "Double") or contains(to_string(card.energy_type_select), match: "Special") or contains(to_string(card.energy_type_select), match: "G-SPEC") then 523 else 0 else 0}
+		height: {if card.card_type_select == "Energy" then if contains(to_string(card.energy_type_select), match: "Double") or contains(to_string(card.energy_type_select), match: "Special") then 283 else if contains(to_string(card.energy_type_select), match: "G-SPEC") then 233 else 0 else 0}
 		z index: 2
 		alignment: top left shrink-overflow
-		font: 
-			name: Gill Sans
-			size: 23
+		font:
+			name: Gill Sans Std
+			size: 26
 			color: rgb(0, 0, 0)
-			scale down to: 18
-		symbol font:
-			name: pokemod-thegathering-symbols
-			size: 20
-			alignment: top center
 			scale down to: 12
-		visible: { if card.card_subtype = "Basic Energy Card" or card.card_subtype = "Special Energy Card" then true else false }
+		symbol font:
+			name: pokemod-thegathering-coloredsymbols
+			size: 32
+			alignment: middle center
+			scale down to: 12
+		visible: {if card.card_type_select == "Energy" then if contains(card.energy_type_select, match: "Double") or contains(card.energy_type_select, match: "Special") or contains(to_string(card.energy_type_select), match: "G-SPEC") then true else false else false}
+		
+	extra_energy_rules:
+		left: {if card.card_type_select == "Energy" then 42 else 0}
+		top: {if card.card_type_select == "Energy" then 708 else 0}
+		width: {if card.card_type_select == "Energy" then 515 else 0}
+		height: {if card.card_type_select == "Energy" then 52 else 0}
+		z index: 2
+		alignment: top center shrink-overflow
+		font:
+			name: Gill Sans Std
+			style: italic
+			size: 18
+			color: rgb(0, 0, 0)
+			scale down to: 14
+		visible: {if card.card_type_select == "Energy" then if card.energy_type_select == "G-SPEC" then true else false else false}

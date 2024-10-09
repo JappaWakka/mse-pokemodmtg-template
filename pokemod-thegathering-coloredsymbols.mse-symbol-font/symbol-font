@@ -1,0 +1,750 @@
+﻿mse version: 2.0.0
+version: 1.0
+short name: pokemodtypecolors
+installer group: pokemod/typecolor symbolfont
+
+image font size: 220
+horizontal space: 1
+
+###Uppercase
+symbol:
+	code: C
+	image: type_colorless.png
+symbol:
+	code: D
+	image: type_darkness.png
+symbol:
+	code: N
+	image: type_dragon.png
+symbol:
+	code: Y
+	image: type_fairy.png
+symbol:
+	code: F
+	image: type_fighting.png
+symbol:
+	code: R
+	image: type_fire.png
+symbol:
+	code: G
+	image: type_grass.png
+symbol:
+	code: L
+	image: type_lightning.png
+symbol:
+	code: M
+	image: type_metal.png
+symbol:
+	code: P
+	image: type_psychic.png
+symbol:
+	code: W
+	image: type_water.png
+symbol:
+	code: UAW
+	image font size: 170
+	image: unown_A.png
+symbol:
+	code: UBW
+	image font size: 170
+	image: unown_B.png
+symbol:
+	code: UCW
+	image font size: 170
+	image: unown_C.png
+symbol:
+	code: UDW
+	image font size: 170
+	image: unown_D.png
+symbol:
+	code: UEW
+	image font size: 170
+	image: unown_E.png
+symbol:
+	code: UFW
+	image font size: 170
+	image: unown_F.png
+symbol:
+	code: UGW
+	image font size: 170
+	image: unown_G.png
+symbol:
+	code: UHW
+	image font size: 170
+	image: unown_H.png
+symbol:
+	code: UIW
+	image font size: 170
+	image: unown_I.png
+symbol:
+	code: UJW
+	image font size: 170
+	image: unown_J.png
+symbol:
+	code: UKW
+	image font size: 170
+	image: unown_K.png
+symbol:
+	code: ULW
+	image font size: 170
+	image: unown_L.png
+symbol:
+	code: UMW
+	image font size: 170
+	image: unown_M.png
+symbol:
+	code: UNW
+	image font size: 170
+	image: unown_N.png
+symbol:
+	code: UOW
+	image font size: 170
+	image: unown_O.png
+symbol:
+	code: UPW
+	image font size: 170
+	image: unown_P.png
+symbol:
+	code: UQW
+	image font size: 170
+	image: unown_Q.png
+symbol:
+	code: URW
+	image font size: 170
+	image: unown_R.png
+symbol:
+	code: USW
+	image font size: 170
+	image: unown_S.png
+symbol:
+	code: UTW
+	image font size: 170
+	image: unown_T.png
+symbol:
+	code: UUW
+	image font size: 170
+	image: unown_U.png
+symbol:
+	code: UVW
+	image font size: 170
+	image: unown_V.png
+symbol:
+	code: UWW
+	image font size: 170
+	image: unown_W.png
+symbol:
+	code: UXW
+	image font size: 170
+	image: unown_X.png
+symbol:
+	code: UYW
+	image font size: 170
+	image: unown_Y.png
+symbol:
+	code: UZW
+	image font size: 170
+	image: unown_Z.png
+symbol:
+	code: U?W
+	image font size: 170
+	image: unown_question.png
+symbol:
+	code: U!W
+	image font size: 170
+	image: unown_exclamation.png
+	
+symbol:
+	code: UAB
+	image font size: 170
+	image: unown_A_black.png
+symbol:
+	code: UBB
+	image font size: 170
+	image: unown_B_black.png
+symbol:
+	code: UCB
+	image font size: 170
+	image: unown_C_black.png
+symbol:
+	code: UDB
+	image font size: 170
+	image: unown_D_black.png
+symbol:
+	code: UEB
+	image font size: 170
+	image: unown_E_black.png
+symbol:
+	code: UFB
+	image font size: 170
+	image: unown_F_black.png
+symbol:
+	code: UGB
+	image font size: 170
+	image: unown_G_black.png
+symbol:
+	code: UHB
+	image font size: 170
+	image: unown_H_black.png
+symbol:
+	code: UIB
+	image font size: 170
+	image: unown_I_black.png
+symbol:
+	code: UJB
+	image font size: 170
+	image: unown_J_black.png
+symbol:
+	code: UKB
+	image font size: 170
+	image: unown_K_black.png
+symbol:
+	code: ULB
+	image font size: 170
+	image: unown_L_black.png
+symbol:
+	code: UMB
+	image font size: 170
+	image: unown_M_black.png
+symbol:
+	code: UNB
+	image font size: 170
+	image: unown_N_black.png
+symbol:
+	code: UOB
+	image font size: 170
+	image: unown_O_black.png
+symbol:
+	code: UPB
+	image font size: 170
+	image: unown_P_black.png
+symbol:
+	code: UQB
+	image font size: 170
+	image: unown_Q_black.png
+symbol:
+	code: URB
+	image font size: 170
+	image: unown_R_black.png
+symbol:
+	code: USB
+	image font size: 170
+	image: unown_S_black.png
+symbol:
+	code: UTB
+	image font size: 170
+	image: unown_T_black.png
+symbol:
+	code: UUB
+	image font size: 170
+	image: unown_U_black.png
+symbol:
+	code: UVB
+	image font size: 170
+	image: unown_V_black.png
+symbol:
+	code: UWB
+	image font size: 170
+	image: unown_W_black.png
+symbol:
+	code: UXB
+	image font size: 170
+	image: unown_X_black.png
+symbol:
+	code: UYB
+	image font size: 170
+	image: unown_Y_black.png
+symbol:
+	code: UZB
+	image font size: 170
+	image: unown_Z_black.png
+symbol:
+	code: U?B
+	image font size: 170
+	image: unown_question_black.png
+symbol:
+	code: U!B
+	image font size: 170
+	image: unown_exclamation_black.png
+
+symbol:
+	code: UAG
+	image font size: 170
+	image: unown_A_green.png
+symbol:
+	code: UBG
+	image font size: 170
+	image: unown_B_green.png
+symbol:
+	code: UCG
+	image font size: 170
+	image: unown_C_green.png
+symbol:
+	code: UDG
+	image font size: 170
+	image: unown_D_green.png
+symbol:
+	code: UEG
+	image font size: 170
+	image: unown_E_green.png
+symbol:
+	code: UFG
+	image font size: 170
+	image: unown_F_green.png
+symbol:
+	code: UGG
+	image font size: 170
+	image: unown_G_green.png
+symbol:
+	code: UHG
+	image font size: 170
+	image: unown_H_green.png
+symbol:
+	code: UIG
+	image font size: 170
+	image: unown_I_green.png
+symbol:
+	code: UJG
+	image font size: 170
+	image: unown_J_green.png
+symbol:
+	code: UKG
+	image font size: 170
+	image: unown_K_green.png
+symbol:
+	code: ULG
+	image font size: 170
+	image: unown_L_green.png
+symbol:
+	code: UMG
+	image font size: 170
+	image: unown_M_green.png
+symbol:
+	code: UNG
+	image font size: 170
+	image: unown_N_green.png
+symbol:
+	code: UOG
+	image font size: 170
+	image: unown_O_green.png
+symbol:
+	code: UPG
+	image font size: 170
+	image: unown_P_green.png
+symbol:
+	code: UQG
+	image font size: 170
+	image: unown_Q_green.png
+symbol:
+	code: URG
+	image font size: 170
+	image: unown_R_green.png
+symbol:
+	code: USG
+	image font size: 170
+	image: unown_S_green.png
+symbol:
+	code: UTG
+	image font size: 170
+	image: unown_T_green.png
+symbol:
+	code: UUG
+	image font size: 170
+	image: unown_U_green.png
+symbol:
+	code: UVG
+	image font size: 170
+	image: unown_V_green.png
+symbol:
+	code: UWG
+	image font size: 170
+	image: unown_W_green.png
+symbol:
+	code: UXG
+	image font size: 170
+	image: unown_X_green.png
+symbol:
+	code: UYG
+	image font size: 170
+	image: unown_Y_green.png
+symbol:
+	code: UZG
+	image font size: 170
+	image: unown_Z_green.png
+symbol:
+	code: U?G
+	image font size: 170
+	image: unown_question_green.png
+symbol:
+	code: U!G
+	image font size: 170
+	image: unown_exclamation_green.png
+###Lowercase
+symbol:
+	code: c
+	image: type_colorless.png
+symbol:
+	code: d
+	image: type_darkness.png
+symbol:
+	code: n
+	image: type_dragon.png
+symbol:
+	code: y
+	image: type_fairy.png
+symbol:
+	code: f
+	image: type_fighting.png
+symbol:
+	code: r
+	image: type_fire.png
+symbol:
+	code: g
+	image: type_grass.png
+symbol:
+	code: l
+	image: type_lightning.png
+symbol:
+	code: m
+	image: type_metal.png
+symbol:
+	code: p
+	image: type_psychic.png
+symbol:
+	code: w
+	image: type_water.png
+symbol:
+	code: ua
+	image font size: 170
+	image: unown_A.png
+symbol:
+	code: ub
+	image font size: 170
+	image: unown_B.png
+symbol:
+	code: uc
+	image font size: 170
+	image: unown_C.png
+symbol:
+	code: ud
+	image font size: 170
+	image: unown_D.png
+symbol:
+	code: ue
+	image font size: 170
+	image: unown_E.png
+symbol:
+	code: uf
+	image font size: 170
+	image: unown_F.png
+symbol:
+	code: ug
+	image font size: 170
+	image: unown_G.png
+symbol:
+	code: uh
+	image font size: 170
+	image: unown_H.png
+symbol:
+	code: ui
+	image font size: 170
+	image: unown_I.png
+symbol:
+	code: uj
+	image font size: 170
+	image: unown_J.png
+symbol:
+	code: uk
+	image font size: 170
+	image: unown_K.png
+symbol:
+	code: ul
+	image font size: 170
+	image: unown_L.png
+symbol:
+	code: um
+	image font size: 170
+	image: unown_M.png
+symbol:
+	code: un
+	image font size: 170
+	image: unown_N.png
+symbol:
+	code: uo
+	image font size: 170
+	image: unown_O.png
+symbol:
+	code: up
+	image font size: 170
+	image: unown_P.png
+symbol:
+	code: uq
+	image font size: 170
+	image: unown_Q.png
+symbol:
+	code: ur
+	image font size: 170
+	image: unown_R.png
+symbol:
+	code: us
+	image font size: 170
+	image: unown_S.png
+symbol:
+	code: ut
+	image font size: 170
+	image: unown_T.png
+symbol:
+	code: uu
+	image font size: 170
+	image: unown_U.png
+symbol:
+	code: uv
+	image font size: 170
+	image: unown_V.png
+symbol:
+	code: uw
+	image font size: 170
+	image: unown_W.png
+symbol:
+	code: ux
+	image font size: 170
+	image: unown_X.png
+symbol:
+	code: uy
+	image font size: 170
+	image: unown_Y.png
+symbol:
+	code: uz
+	image font size: 170
+	image: unown_Z.png
+symbol:
+	code: u?
+	image font size: 170
+	image: unown_question.png
+symbol:
+	code: u!
+	image font size: 170
+	image: unown_exclamation.png
+symbol:
+	code: uab
+	image font size: 170
+	image: unown_A_black.png
+symbol:
+	code: ubb
+	image font size: 170
+	image: unown_B_black.png
+symbol:
+	code: ucb
+	image font size: 170
+	image: unown_C_black.png
+symbol:
+	code: udb
+	image font size: 170
+	image: unown_D_black.png
+symbol:
+	code: ueb
+	image font size: 170
+	image: unown_E_black.png
+symbol:
+	code: ufb
+	image font size: 170
+	image: unown_F_black.png
+symbol:
+	code: ugb
+	image font size: 170
+	image: unown_G_black.png
+symbol:
+	code: uhb
+	image font size: 170
+	image: unown_H_black.png
+symbol:
+	code: uib
+	image font size: 170
+	image: unown_I_black.png
+symbol:
+	code: ujb
+	image font size: 170
+	image: unown_J_black.png
+symbol:
+	code: ukb
+	image font size: 170
+	image: unown_K_black.png
+symbol:
+	code: ulb
+	image font size: 170
+	image: unown_L_black.png
+symbol:
+	code: umb
+	image font size: 170
+	image: unown_M_black.png
+symbol:
+	code: unb
+	image font size: 170
+	image: unown_N_black.png
+symbol:
+	code: uob
+	image font size: 170
+	image: unown_O_black.png
+symbol:
+	code: upb
+	image font size: 170
+	image: unown_P_black.png
+symbol:
+	code: uqb
+	image font size: 170
+	image: unown_Q_black.png
+symbol:
+	code: urb
+	image font size: 170
+	image: unown_R_black.png
+symbol:
+	code: usb
+	image font size: 170
+	image: unown_S_black.png
+symbol:
+	code: utb
+	image font size: 170
+	image: unown_T_black.png
+symbol:
+	code: uub
+	image font size: 170
+	image: unown_U_black.png
+symbol:
+	code: uvb
+	image font size: 170
+	image: unown_V_black.png
+symbol:
+	code: uwb
+	image font size: 170
+	image: unown_W_black.png
+symbol:
+	code: uxb
+	image font size: 170
+	image: unown_X_black.png
+symbol:
+	code: uyb
+	image font size: 170
+	image: unown_Y_black.png
+symbol:
+	code: uzb
+	image font size: 170
+	image: unown_Z_black.png
+symbol:
+	code: u?b
+	image font size: 170
+	image: unown_question_black.png
+symbol:
+	code: u!b
+	image font size: 170
+	image: unown_exclamation_black.png
+symbol:
+	code: uag
+	image font size: 170
+	image: unown_A_green.png
+symbol:
+	code: ubg
+	image font size: 170
+	image: unown_B_green.png
+symbol:
+	code: ucg
+	image font size: 170
+	image: unown_C_green.png
+symbol:
+	code: udg
+	image font size: 170
+	image: unown_D_green.png
+symbol:
+	code: ueg
+	image font size: 170
+	image: unown_E_green.png
+symbol:
+	code: ufg
+	image font size: 170
+	image: unown_F_green.png
+symbol:
+	code: ugg
+	image font size: 170
+	image: unown_G_green.png
+symbol:
+	code: uhg
+	image font size: 170
+	image: unown_H_green.png
+symbol:
+	code: uig
+	image font size: 170
+	image: unown_I_green.png
+symbol:
+	code: ujg
+	image font size: 170
+	image: unown_J_green.png
+symbol:
+	code: ukg
+	image font size: 170
+	image: unown_K_green.png
+symbol:
+	code: ulg
+	image font size: 170
+	image: unown_L_green.png
+symbol:
+	code: umg
+	image font size: 170
+	image: unown_M_green.png
+symbol:
+	code: ung
+	image font size: 170
+	image: unown_N_green.png
+symbol:
+	code: uog
+	image font size: 170
+	image: unown_O_green.png
+symbol:
+	code: upg
+	image font size: 170
+	image: unown_P_green.png
+symbol:
+	code: uqg
+	image font size: 170
+	image: unown_Q_green.png
+symbol:
+	code: urg
+	image font size: 170
+	image: unown_R_green.png
+symbol:
+	code: usg
+	image font size: 170
+	image: unown_S_green.png
+symbol:
+	code: utg
+	image font size: 170
+	image: unown_T_green.png
+symbol:
+	code: uug
+	image font size: 170
+	image: unown_U_green.png
+symbol:
+	code: uvg
+	image font size: 170
+	image: unown_V_green.png
+symbol:
+	code: uwg
+	image font size: 170
+	image: unown_W_green.png
+symbol:
+	code: uxg
+	image font size: 170
+	image: unown_X_green.png
+symbol:
+	code: uyg
+	image font size: 170
+	image: unown_Y_green.png
+symbol:
+	code: uzg
+	image font size: 170
+	image: unown_Z_green.png
+symbol:
+	code: u?g
+	image font size: 170
+	image: unown_question_green.png
+symbol:
+	code: u!g
+	image font size: 170
+	image: unown_exclamation_green.png

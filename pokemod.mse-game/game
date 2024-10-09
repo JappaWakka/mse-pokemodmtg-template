@@ -1,6 +1,4 @@
-### Welcome to the unofficial Pokemon TCG Template for Magic Set Editor created by Nikki. ###
-
-mse version: 2.0.0
+﻿mse version: 2.0.0
 short name: Pokemod
 full name: Pokemod
 installer group: pokemod/game files
@@ -9,7 +7,7 @@ position hint: 01
 version: 1.0
 
 ###### Scripts ######
-init script
+init script:
 	card_number := {
 			position (
 				of: card
@@ -17,35 +15,148 @@ init script
 			) + 1
 		}
 	card_count := {
-		number_of_items(in: set)
+		if number_of_items(in: set) < to_int(set.max_card_amount) then number_of_items(in: set) else to_int(set.max_card_amount)
 	}
 	card_number_pkmn := { (if card_number() < 100 then "0" else "") + (if card_number() < 10 then "0" else "") + card_number() }
 	card_count_pkmn := { (if card_count() < 100 then "0" else "") + (if card_count() < 10 then "0" else "") + card_count() }
 
-
-
+	
 ###### Set Information ######
 set field:
 	type: info
-	name: Set Information
+	name: set information
 	description: Information about this set. This information will not appear on the card.
 set field:
 	type: text
-	name: title
+	name: set title
 	description: Title of this set. This information will not appear on the card.
 set field:
 	type: text
-	name: Description
+	name: description
 	multi line: true
 	description: Description of this set. This information will not appear on the card.
-
+set field:
+	type: choice
+	name: language
+	description: Language of the set. This will also change the default card field values.
+	initial: English
+	choice: English
+	choice: Nederlands
+set field:
+	type: choice
+	name: default_set_symbol
+	initial: Pokemod
+	choice: None
+	choice: Pokemod
+	choice: Custom
+set field:
+	type: text
+	name: max_card_amount
+	description: Cards above this number become Secret Cards.
+	default: "100"
+	
 ###### Card Fields ######
-### Card Type. ie Grass Basic, Fire Stage 2, Dragon Stage 1, Trainer Supporter, etc. ###
+##### Type Of Card Frame #####
+
+### Card Type Selector ###
+card field:
+	type: choice
+	name: card_type_select
+	card list allow: false
+	save value: true
+	initial: Pokemon
+	choice: Pokemon
+	choice: Energy
+	choice: Trainer
+
+### Pokémon Type Selector ###
+card field:
+	type: choice
+	name: pokemon_type_select
+	description: What type is this Pokémon?
+	card list allow: false
+	initial: Grass
+	save value: true
+	choice: Colorless
+	choice: Darkness
+	choice: Dragon
+	choice: Fairy
+	choice: Fighting
+	choice: Fire
+	choice: Grass
+	choice: Lightning
+	choice: Metal
+	choice: Psychic
+	choice: Water
+	choice: G-SPEC
+	choice: G-SPEC Lightning
+	choice: Crystal Type
+	
+### Pokémon Attack/Power Combination
+card field:
+	type: choice
+	name: pokemon_attackpower_combination
+	description: How many attacks and/or powers does this Pokémon have?
+	card list name: Attack/Power Combination
+	initial: 2 Attacks
+	choice: 1 Power 0 Attacks
+	choice: 1 Power 1 Attack
+	choice: 1 Power 2 Attacks
+	choice: 2 Powers
+	choice: 1 Attack
+	choice: 2 Attacks
+	choice: 3 Attacks
+
+### Energy Type Selector ###
+card field:
+	type: choice
+	name: energy_type_select
+	save value: true
+	card list allow: false
+	initial: Colorless Special
+	choice: Colorless Special
+	choice: Double Colorless
+	choice: Darkness
+	choice: Darkness Special
+	choice: Double Dragon
+	choice: Fairy
+	choice: Fighting
+	choice: Fire
+	choice: Grass
+	choice: Lightning
+	choice: Metal
+	choice: Metal Special
+	choice: Psychic
+	choice: Water
+	choice: Rainbow Special
+	choice: Double Rainbow
+	choice: G-SPEC
+
+### Trainer Type Selector ###
+card field:
+	type: choice
+	save value: true
+	name: trainer_type_select
+	card list allow: false
+	initial: Regular
+	choice: Regular
+	choice: Supporter
+	choice: Stadium
+	choice: With HP
+	choice: Tool Active
+	choice: Tool Bench
+	choice: Tool Regular
+	choice: Technical Machine
+	choice: Stadium with Attack
+	choice: G-SPEC
+	choice: G-SPEC with Attack
+	
+### Card Frame Type Image ###
 card field:
 	type: choice
 	name: card_frame
-	description: The type of card
-	initial: Pokemon Grass
+	editable: false
+	show statistics: false
 	choice:
 		name: Pokemon
 		choice: Colorless
@@ -59,12 +170,14 @@ card field:
 		choice: Metal
 		choice: Psychic
 		choice: Water
-
+		choice: G-SPEC
+		choice: G-SPEC Lightning
 	choice:
 		name: Energy
-		choice: Colorless
-		choice: Darkness
+		choice: Colorless Special
 		choice: Double Colorless
+		choice: Darkness
+		choice: Darkness Special
 		choice: Double Dragon
 		choice: Fairy
 		choice: Fighting
@@ -72,174 +185,16 @@ card field:
 		choice: Grass
 		choice: Lightning
 		choice: Metal
+		choice: Metal Special
 		choice: Psychic
 		choice: Water
-
+		choice: Rainbow Special
+		choice: Double Rainbow
+		choice: G-SPEC
 	choice: Trainer
-
-### Name of card ###
-card field:
-	type: text
-	name: name
-	description: Name of Card
-	identifying: false
-	show statistics: false
-	default: "Name"
-	card list name: Name
-	card list visible: true
-	card list column: 1
-
-### HP ###
-card field:
-	type: text
-	name: hp
-	description: Hit Points
-	default: "HP"
-
-###### Attack 1 ######
-
-### Cost of Attack ###
-card field:
-	type: text
-	name: attack1_cost
-	description: Cost of Attack 1.
-	multi line: true
-	show statistics: false
-	
-### Damage count ###
-card field:
-	type: text
-	name: attack1_damage
-	description: Amount of Damage Attack 1 deals.
-	show statistics: false
-	
-### Rules Text for attack ###
-card field:
-	type: text
-	name: attack1_rules
-	description: Rules Text for Attack 1.
-	show statistics: false
-	multi line: true
-
-###### Attack 2 ######
-
-### Cost of Attack ###
-card field:
-	type: text
-	name: attack2_cost
-	description: Cost of Attack 2.
-	show statistics: false
-	multi line: true
-	
-### Damage Count ###
-card field:
-	type: text
-	name: attack2_damage
-	description: Amount of Damage Attack 2 deals.
-	show statistics: false
-	
-### Rules Text for attack ###
-card field:
-	type: text
-	name: attack2_rules
-	description: Rules Text for Attack 2.
-	show statistics: false
-	multi line: true
-	
-###### Pokémon Power ######
-
-### Rules Text for Pokémon Power ###
-card field:
-	type: text
-	name: power_rules
-	description: Rules Text for Pokémon Power.
-	show statistics: false
-	multi line: true
-
-###### Energy Rules ######
-card field:
-	type: text
-	name: energy_rules
-	description: Rules Text for Special Energy cards.
-	show statistics: false
-	multi line: true
-
-###### Trainer Rules ######
-card field:
-	type: text
-	name: trainer_rules
-	description: Rules Text for Trainer cards.
-	show statistics: false
-	multi line: true
-	
-###### Supporter Rules ######
-card field:
-	type: text
-	name: supporter_rules
-	editable:false
-	description: Rules Text for Supporter Trainer cards
-	show statistics: false
-	multi line: true
-	default: "You can play only one Supporter card each turn. When you play this card, put it next to your Active Pokémon. When your turn ends, discard this card."
-
-###### Weakness ######
-card field:
-	type: text
-	name: weakness
-	description: Weakness
-	show statistics: false
-
-###### Resistance Value ######
-card field:
-	type: text
-	name: resistance
-	description: Resistance
-	show statistics: false
-
-###### Resistance -30 ######
-card field:
-	type: choice
-	name: resistance_value
-	description: Resistance -30
-	show statistics: false
-	editable: false
-	initial: -30
-	choice: -30
-	
-###### Retreat Cost ######
-card field:
-	type: choice
-	name: retreat_cost
-	description: Retreat Cost
-	show statistics: false
-	choice: 0
-	choice: 1
-	choice: 2
-	choice: 3
-	choice: 4
-	card list visible: true
-	card list column: 3
-
-###### Rarity ######
-card field:
-	type: choice
-	name: rarity
-	description: Rarity
-	initial: Common
-	choice:	Basic Energy
-	choice: Common
-	choice: Uncommon
-	choice: Rare
-	choice: Rare Holo
-
-
-###### Dex Entry ######
-card field:
-	type: text
-	name: dex_entry
-	description: Dex Entry
-	show statistics: false
-	multi line: true
+	choice: Trainer G-SPEC
+	script:
+		if card.card_type_select == "Pokemon" then card.card_type_select + " " + card.pokemon_type_select else if card.card_type_select == "Energy" then card.card_type_select + " " + card.energy_type_select else if card.card_type_select == "Trainer" then if card.trainer_type_select == "G-SPEC" or card.trainer_type_select == "G-SPEC with Attack" then card.card_type_select + " " + "G-SPEC" else card.card_type_select
 
 ###### Card Art ######
 card field:
@@ -248,61 +203,447 @@ card field:
 	description: Card Art
 	show statistics: false
 
-###### Dex Entry ######
+### Card Name ###
 card field:
 	type: text
-	name: stats
+	name: name
+	description: Name of the card
+	identifying: false
 	show statistics: false
+	default: "Name"
+	multi line: true
+	card list name: Name
+	card list visible: true
+	card list column: 1
+	script:
+		if value == "Name" and set.language == "Nederlands" then "Naam" else if value == "Naam" and set.language == "English" then "Name" else value
 
-###### Artist Name ######
+### HP ###
 card field:
 	type: text
-	name: artist_name
-	show statistics: false
+	name: hp
+	description: Hit Points
+	default: "HP"
+	script:
+		if card.card_type_select == "Pokemon" then if value == "HP" and set.language == "Nederlands" then "IP" else if value == "IP" and set.language == "English" then "HP" else value else if card.card_type_select == "Trainer" and card.trainer_type_select == "With HP" then if value == "HP" and set.language == "Nederlands" then "IP" else if value == "IP" and set.language == "English" then "HP" else value
 
-###### Artist Role ######
+### Trainer Card "Symbol" ###
 card field:
 	type: text
-	name: artist_role
+	name: trainer_card_symbol
+	default: "TRAINER"
+	editable: false
+	
+###### Card Subtype ######
+card field:
+	type: text
+	name: card subtype
+	description: Subtype of Card
 	show statistics: false
-	default: "Illustrator"
+	multi line: true
+	default: "Basic"
+	save value: true
+	script:
+		if card.card_type_select == "Pokemon" then if value == "Basis" and set.language == "English" then "Basic" else if value == "Basic" and set.language == "Nederlands" then "Basis" else value else if card.card_type_select == "Trainer" then if contains(to_string(card.trainer_type_select), match: "G-SPEC") == true then if set.language == "English" then "G-SPEC" else if set.language == "Nederlands" then "G-SPEC" else value else if card.trainer_type_select == "Supporter" then if set.language == "English" then "Supporter" else if set.language == "Nederlands" then "Ondersteuner" else value else if card.trainer_type_select == "Stadium" or card.trainer_type_select == "Stadium with Attack" then if set.language == "English" then "Stadium" else if set.language == "Nederlands" then "Stadion" else value else if card.trainer_type_select == "Tool Bench" or card.trainer_type_select == "Tool Active" or card.trainer_type_select == "Tool Regular" then if set.language == "English" then "Pokémon Tool" else if set.language == "Nederlands" then "Pokémon-Gereedschap" else value else value else if card.card_type_select == "Energy" then if contains(card.energy_type_select, match: "Double") == true or contains(card.energy_type_select, match: "Special") == true then if set.language == "English" then "Special Energy" else if set.language == "Nederlands" then "Speciale Energie" else value else if contains(to_string(card.energy_type_select), match: "G-SPEC") == true then if set.language == "English" then "G-SPEC | Special Energy" else if set.language == "Nederlands" then "G-SPEC | Speciale Energie" else value else if set.language == "English" then "Basic Energy" else if set.language == "Nederlands" then "Basis-Energiekaart" else value else value
 
+###### Pokémod Logo ######
+card field:
+	type: choice
+	name: pokemod logo
+	description: Type of Pokémod Logo
+	initial: White
+	choice: White
+	choice: Red
+	choice: Green
+	choice:	Blue
+
+###### Custom Logo ######
+card field:
+	type: choice
+	name: custom logo
+	description: Custom Set Logo
+	initial: Custom 1
+	choice: Custom 1
+	choice: Custom 2
+	choice: Custom 3
+	choice: Custom 4
+	choice: Custom 5
+	choice: Custom 6
+	
 ###### Set Number ######
 card field:
 	type: text
-	name: set_number
+	name: set number
 	description: Set Number
 	editable: false
 	show statistics: false
 	script:
 		card_number_pkmn() + "/" + card_count_pkmn()
+		
+###### Rarity ######
+card field:
+	type: choice
+	name: rarity
+	description: Rarity of the card
+	card list name: Rarity
+	card list visible: true
+	initial: Common
+	choice:	Basic Energy
+	choice: Common
+	choice: Uncommon
+	choice: Rare
+	choice: Secret Rare
+	script:
+		if card.card_type_select == "Energy" then if contains(card.energy_type_select, match: "Double") == false and contains(card.energy_type_select, match: "Special") == false and contains(card.energy_type_select, match: "G-SPEC") == false then "Basic Energy" else if contains(card.energy_type_select, match: "G-SPEC") == true then "Secret Rare" else value else if card.card_type_select == "Trainer" then if contains(card.trainer_type_select, match: "G-SPEC") == true then "Secret Rare" else value else value
+
+###### Trainer Rules ######
+card field:
+	type: text
+	name: trainer rules
+	description: Rules Text for Trainer cards.
+	show statistics: false
+	card list allow: false
+	multi line: true
 	
+###### Extra Trainer Rules ######
+card field:
+	type: text
+	name: extra trainer rules
+	editable: false
+	description: Rules Text for special types of Trainer cards.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	script:
+		if card.trainer_type_select == "Supporter" then
+			if set.language == "English" then
+				"You can play only one Supporter card each turn. When you play this card, put it next to your Active Pokémon. When your turn ends, discard this card."
+			else if set.language == "Nederlands" then
+				"Je kunt maar één Ondersteunerkaart spelen per beurt. Wanneer je deze kaart speelt, leg je hem naast je Actieve Pokémon. Als je beurt voorbij is, gooi je deze kaart weg."
+			else ""
+		else if card.trainer_type_select == "Stadium" or card.trainer_type_select == "Stadium with Attack" then
+			if set.language == "English" then
+				"This card stays in play when you play it. Discard this card if another Stadium card comes into play."
+			else if set.language == "Nederlands" then
+				"Deze kaart blijft in het spel nadat je hem gespeeld hebt. Gooi deze kaart weg als er een andere Stadionkaart in het spel komt."
+			else ""
+		else if card.trainer_type_select == "Tool Bench" then
+			if set.language == "English" then
+				"Attach" + " " + card.name + " " + "to 1 of your Benched Pokémon that doesn't already have a Pokémon Tool card attached to it."
+			else if set.language == "Nederlands" then
+				"Hecht" + " " + card.name + " " + "aan 1 van je Pokémon op de Bank waar nog geen Pokémon-Gereedschapkaart aan gehecht is."
+			else ""
+		else if card.trainer_type_select == "Tool Active" then
+			if set.language == "English" then
+				"Attach" + " " + card.name + " " + "to your Active Pokémon if it doesn't already have a Pokémon Tool card attached to it."
+			else if set.language == "Nederlands" then 
+				"Hecht" + " " + card.name + " " + "aan je Actieve Pokémon als er nog geen Pokémon-Gereedschapkaart aan gehecht is."
+			else ""
+		else if card.trainer_type_select == "Tool Regular" then
+			if set.language == "English" then
+				"Attach" + " " + card.name + " " + "to 1 of your Pokémon that doesn't already have a Pokémon Tool card attached to it."
+			else if set.language == "Nederlands" then
+				"Hecht" + " " + card.name + " " + "aan 1 van je Pokémon waar nog geen Pokémon-Gereedschapkaart aan gehecht is."
+			else ""
+		else if card.trainer_type_select == "Technical Machine" then
+			if set.language == "English" then
+				"Attach this card to 1 of your Pokémon in play. That Pokémon may use this card’s attack instead of its own. At the end of your turn, discard"+ " " + card.name + "."
+			else if set.language == "Nederlands" then
+				"Hecht deze kaart aan 1 van je Pokémon in het spel. Die Pokémon mag de aanval op deze kaart gebruiken in plaats van één van zijn eigen aanvallen. Als je beurt voorbij is, gooi" + " " + card.name + " " + "dan weg."
+			else ""
+		else if card.trainer_type_select == "G-SPEC" or card.trainer_type_select == "G-SPEC with Attack" then
+			if set.language == "English" then
+				"You can't have more than 1 G-SPEC card in your deck.\nWhen this card leaves play, it moves to the Lost Zone."
+			else if set.language == "Nederlands" then
+				"Je kunt niet meer dan 1 G-SPEC-kaart in je deck hebben.\nWanneer deze kaart het spel verlaat, verplaats hem dan naar de Verloren Kaartenstapel."
+			else ""
+		else ""
+
+###### Energy Rules ######
+card field:
+	type: text
+	name: energy rules
+	description: Rules Text for Special Energy cards.
+	show statistics: false
+	card list allow: false
+	multi line: true
+
+###### Extra Energy Rules ######
+card field:
+	type: text
+	name: extra energy rules
+	editable: false
+	description: Rules Text for special types of Energy cards.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	script:
+		if set.language == "English" then
+			"You can't have more than 1 G-SPEC card in your deck.\nWhen this card leaves play, it moves to the Lost Zone."
+		else if set.language == "Nederlands" then
+			"Je kunt niet meer dan 1 G-SPEC-kaart in je deck hebben.\nWanneer deze kaart het spel verlaat, verplaats hem dan naar de Verloren Kaartenstapel."
+		else ""
+	
+###### Pokémon Attacks & Powers######
+### Attack 1 Damage Availability ###
+card field:
+	type: choice
+	name: attack1 damage exist
+	description: Does Attack 1 do Damage?
+	show statistics: false
+	card list allow: false
+	initial: yes
+	choice: yes
+	choice: no
+	
+### Attack 2 Damage Availability ###
+card field:
+	type: choice
+	name: attack2 damage exist
+	description: Does Attack 2 do Damage?
+	show statistics: false
+	card list allow: false
+	initial: yes
+	choice: yes
+	choice: no
+	
+### Attack 3 Damage Availability ###
+card field:
+	type: choice
+	name: attack3 damage exist
+	description: Does Attack 3 do Damage?
+	show statistics: false
+	card list allow: false
+	initial: yes
+	choice: yes
+	choice: no
+	
+### Attack 1 Energy Cost ###
+card field:
+	type: text
+	name: attack1 cost
+	description: Cost of Attack 1.
+	multi line: true
+	card list allow: false
+	show statistics: false
+	
+	
+### Attack 2 Energy Cost ###
+card field:
+	type: text
+	name: attack2 cost
+	description: Cost of Attack 2.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	
+
+### Attack 3 Energy Cost ###
+card field:
+	type: text
+	name: attack3 cost
+	description: Cost of Attack 3.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	
+	
+### Attack 1 Damage Amount ###
+card field:
+	type: text
+	name: attack1 damage
+	description: Amount of Damage Attack 1 deals.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	
+
+### Attack 2 Damage Amount ###
+card field:
+	type: text
+	name: attack2 damage
+	description: Amount of Damage Attack 2 deals.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	
+
+### Attack 3 Damage Amount ###
+card field:
+	type: text
+	name: attack3 damage
+	description: Amount of Damage Attack 3 deals.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	
+
+### Attack 1 Rules Text ###
+card field:
+	type: text
+	name: attack1 rules
+	description: Rules Text for Attack 1.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	
+
+### Attack 2 Rules Text ###
+card field:
+	type: text
+	name: attack2 rules
+	description: Rules Text for Attack 2.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	
+
+### Attack 3 Rules Text ###
+card field:
+	type: text
+	name: attack3 rules
+	description: Rules Text for Attack 3.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	
+
+### Rules Text for Pokémon Power 1 ###
+card field:
+	type: text
+	name: power1 rules
+	description: Rules Text for Pokémon/Baby Power 1.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	script:
+		ability_color_filter(value)
+	
+	
+### Rules Text for Pokémon Power 2 ###
+card field:
+	type: text
+	name: power2 rules
+	description: Rules Text for Pokémon Power 2.
+	show statistics: false
+	card list allow: false
+	multi line: true
+	script:
+		ability_color_filter(value)
+	
+
+###### Pokémon Dex Entry ######
+card field:
+	type: text
+	name: dex entry
+	description: Dex Entry
+	show statistics: false
+	card list allow: false
+	multi line: true
+	script:
+		if card.pokemon_type_select == "G-SPEC" or card.pokemon_type_select == "G-SPEC Lightning" then
+			if set.language == "English" then
+				"You can't have more than 1 G-SPEC card in your deck.\nWhen this card leaves play, it moves to the Lost Zone."
+			else if set.language == "Nederlands" then
+				"Je kunt niet meer dan 1 G-SPEC-kaart in je deck hebben.\nWanneer deze kaart het spel verlaat, verplaats hem dan naar de Verloren Kaartenstapel."
+			else ""
+		else value
+
+###### Weakness Type ######
+card field:
+	type: text
+	name: weakness type
+	description: Weakness
+	show statistics: false
+	
+###### Weakness Stat Text ######
+card field:
+	type: text
+	name: weakness text
+	show statistics: false
+	card list allow: false
+	editable: false
+	script: if set.language == "English" then "weakness" else if set.language == "Nederlands" then "zwakte"
+
+###### Resistance Type ######
+card field:
+	type: text
+	name: resistance type
+	description: Resistance
+	show statistics: false
+
+###### Resistance -30 ######
+card field:
+	type: text
+	name: resistance value
+	description: How much Resistance?
+	card list allow: false
+	show statistics: false
+	editable: true
+	default: "-30"
+	
+###### Resistance Stat Text ######
+card field:
+	type: text
+	name: resistance text
+	show statistics: false
+	card list allow: false
+	editable: false
+	script: if set.language == "English" then "resistance" else if set.language == "Nederlands" then "weerstand"
+	
+###### Retreat Cost Value ######
+card field:
+	type: text
+	name: retreatcost value
+	description: Retreat Cost
+	show statistics: true
+	card list allow: false
+	card list column: 3
+	default: ""
+
+###### Retreat Cost List Value ######
+card field:
+	type: text
+	name: retreatcost list
+	description: Retreat Cost
+	show statistics: true
+	card list name: Retreat Cost
+	card list visible: true
+	card list column: 3
+	script:
+		length(replace(card.retreatcost_value, match: " ", replace: ""))
+
+###### Retreat Cost Stat Text ######
+card field:
+	type: text
+	card list allow: false
+	name: retreatcost text
+	show statistics: false
+	editable: false
+	script: if set.language == "English" then "retreat cost" else if set.language == "Nederlands" then "terugtrekkingskosten"
+		
+###### Artist Name ######
+card field:
+	type: text
+	name: artist name
+	show statistics: false
+	multi line: true
+
+###### Copyright ######
+card field:
+	type: text
+	name: copyright
+	card list allow: false
+	show statistics: false
+	editable: false
+	script: if set.language == "English" then "© Nintendo | Blank by JappaWakka" else if set.language == "Nederlands" then "© Nintendo | Sjabloon door JappaWakka" 
+
 ###### Export Name Builder ######
 card field:
 	type: text
-	name: build_exportname
+	name: exportname
 	description: Export Name Builder
 	editable: false
 	identifying: true
 	show statistics: false
-	script:
-		card_number_pkmn() + "-" + card.name
-
-###### Card Subtype ######
-card field:
-	type: text
-	name: card_subtype
-	description: Subtype of Card
-	show statistics: false
-	multi line: true
-	default: "Basic"
-
-###### Pokémod Logo ######
-card field:
-	type: choice
-	name: pokémod_logo
-	description: Type of Pokémod Logo
-	initial: White
-	choice: White
-	choice: Red
-	choice: None
+	script: card_number_pkmn() + "-" + card.name
